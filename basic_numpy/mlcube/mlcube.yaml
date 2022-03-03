@@ -1,0 +1,25 @@
+name: MLCommons Brats metrics
+description: MLCommons Brats integration for metrics
+authors: 
+ - {name: "MLCommons Best Practices Working Group"}
+
+platform:
+  accelerator_count: 0
+
+docker:
+  # Image name.
+  image: mlcommons/brats_metrics:0.0.1
+  # Docker build context relative to $MLCUBE_ROOT. Default is `build`.
+  build_context: "../project"
+  # Docker file name within docker build context, default is `Dockerfile`.
+  build_file: "Dockerfile"
+
+tasks:
+  evaluate:
+  # Calculate top N best numbers
+    parameters:
+      inputs: {
+        data_path: data/data.txt,
+        parameters_file: parameters.yaml
+      }
+      outputs: {output_path: {type: "file", default: "result/result.txt"}}
