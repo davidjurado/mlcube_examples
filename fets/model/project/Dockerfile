@@ -1,8 +1,13 @@
-# for a CPU app use this Dockerfile.
-FROM python:3.8-buster
+# Please use one of the following base images for your container.
+# This makes sure it can be run successfully in the federated evaluation.
+FROM nvcr.io/nvidia/pytorch:20.08-py3
+# FROM nvcr.io/nvidia/tensorflow:20.08-tf2-py3
+# FROM nvcr.io/nvidia/tensorflow:20.08-tf1-py3
+# TODO maybe bump these to a later version
 
 # fill in your info here
 LABEL author="chuck@norris.org"
+LABEL team="A-team"
 LABEL application="your application name"
 LABEL maintainer="chuck@norris.org"
 LABEL version="0.0.1"
@@ -12,11 +17,13 @@ LABEL status="beta"
 RUN apt-get -y update && apt -y full-upgrade && apt-get -y install apt-utils wget git tar build-essential curl nano
 
 # install all python requirements
-WORKDIR /workspace
+# TODO I chose a different name than "/workspace" to avoid confusion with the MLCube workspace folder mounted at runtime. OK?
+WORKDIR /mlcube_project
 COPY ./requirements.txt ./requirements.txt
 RUN pip3 install -r requirements.txt
 
 # copy all files
-COPY ./ /workspace
+COPY ./ /mlcube_project
 
-ENTRYPOINT [ "python3", "/workspace/mlcube.py"]
+# NOTE: to be able to run this with singularity, an absolute path is required here.
+ENTRYPOINT [ "python3", "/mlcube_project/mlcube.py"]

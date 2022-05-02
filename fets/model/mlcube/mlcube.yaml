@@ -1,7 +1,8 @@
-name: MLCommons Brats
-description: MLCommons Brats integration
+name: MLCommons FeTS
+description: MLCommons FeTS integration
 authors: 
  - {name: "MLCommons Best Practices Working Group"}
+ - {name: "Maximilian Zenk (DKFZ)"}
 
 platform:
   accelerator_count: 0
@@ -9,10 +10,17 @@ platform:
 docker:
   # Image name.
   image: mlcommons/fets_model:0.0.1
+  # image: docker.synapse.org/syn28561391/test_mlcube:latest
   # Docker build context relative to $MLCUBE_ROOT. Default is `build`.
   build_context: "../project"
   # Docker file name within docker build context, default is `Dockerfile`.
   build_file: "Dockerfile"
+
+# singularity:
+#   # Image name.
+#   image: test.sif
+#   # build_args: "--fakeroot"
+#   # build_file: "docker-archive:${docker.image}"
 
 tasks:
   example:
@@ -24,4 +32,6 @@ tasks:
   # Run implementation
     parameters:
       inputs: {data_path: data/, parameters_file: {type: file, default: parameters.yaml}}
+      # TODO Is it possible to include optional inputs here (like alternative path to checkpoints)?
+      # inputs: {data_path: data/, parameters_file: {type: file, default: null}, checkpoint_path: {type: file, default: null}}
       outputs: {output_path: output/}

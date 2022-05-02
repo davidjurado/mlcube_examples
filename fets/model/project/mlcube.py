@@ -1,59 +1,48 @@
 """MLCube handler file"""
 import typer
 import yaml
-from src.my_logic import run_code
+from src.my_logic import run_inference
 
+
+# This is used to create a simple CLI``
 app = typer.Typer()
 
 
-class ExampleTask(object):
-    """Example task Class
-    It reads the content of the parameters file and then
-    prints "MY_NEW_PARAMETER_EXAMPLE"."""
-
-    @staticmethod
-    def run_example(parameters_file: str) -> None:
-
-        # Load parameters from the paramters file
-        with open(parameters_file, "r") as stream:
-            parameters = yaml.safe_load(stream)
-
-        print("This is my new parameter example:")
-        print(parameters["MY_NEW_PARAMETER_EXAMPLE"])
-
-
 class InferTask(object):
-    """Run task Class
-    It defines the environment variables:
+    """ Inference task
+    This class defines the environment variables:
         data_path: Directory path to dataset
         output_path: Directory path to final results
+        checkpoint_path: Directory path to model checkpoints
         All other parameters are defined in parameters_file
-    Then executes the run_code method inside my_logic script"""
+    The `run` method executes the run_inference method from the src.my_logic module"""
 
     @staticmethod
-    def run(data_path: str, output_path: str, parameters_file: str) -> None:
-
+    def run(data_path: str, output_path: str, parameters_file: str, checkpoint_path: str) -> None:
         # Load parameters from the paramters file
         with open(parameters_file, "r") as stream:
             parameters = yaml.safe_load(stream)
 
         application_name = parameters["APPLICATION_NAME"]
         application_version = parameters["APPLICATION_VERSION"]
-        run_code(data_path, output_path, application_name, application_version)
-
-
-@app.command("example")
-def example(parameters_file: str = typer.Option(..., "--parameters_file")):
-    ExampleTask.run_example(parameters_file)
+        run_inference(data_path, output_path, checkpoint_path,
+                      application_name, application_version)
 
 
 @app.command("infer")
 def infer(
     data_path: str = typer.Option(..., "--data_path"),
     output_path: str = typer.Option(..., "--output_path"),
-    parameters_file: str = typer.Option(..., "--parameters_file")
+    parameters_file: str = typer.Option(None, "--parameters_file"),
+    ckpt_path: str = typer.Option(None, "--checkpoint_path")
 ):
-    InferTask.run(data_path, output_path, parameters_file)
+    if ckpt_path is None:
+        # For federated evaluation, model needs to be stored here
+        ckpt_path = "/mlcube_project/model_ckpts"
+    if parameters_file is None:
+        # For federated evaluation, extra parameters need to be stored here
+        parameters_file = "/mlcube_project/parameters.yaml"
+    InferTask.run(data_path, output_path, parameters_file, ckpt_path)
 
 
 if __name__ == "__main__":

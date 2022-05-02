@@ -1,2 +1,4 @@
 PyYAML
 typer
+numpy
+SimpleITK
