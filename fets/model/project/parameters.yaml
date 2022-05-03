@@ -1,5 +1,4 @@
 # Here you can define new parameters
-MY_NEW_PARAMETER_EXAMPLE: "*Example*"
 # author info
 AUTHOR_NAME: "Chuck Norris"
 AUTHOR_EMAIL: "chuck@norris.org"
@@ -7,3 +6,5 @@ AUTHOR_EMAIL: "chuck@norris.org"
 APPLICATION_NAME: "AMAZING APPLICATION"
 # specify version here, if possible use semantic versioning
 APPLICATION_VERSION: "0.0.1"
+# It's also possible to have a hyperparameter config here
+HPARAM_EXAMPLE: 42

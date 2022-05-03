@@ -16,22 +16,10 @@ docker:
   # Docker file name within docker build context, default is `Dockerfile`.
   build_file: "Dockerfile"
 
-# singularity:
-#   # Image name.
-#   image: test.sif
-#   # build_args: "--fakeroot"
-#   # build_file: "docker-archive:${docker.image}"
-
 tasks:
-  example:
-  # Run implementation
-    parameters:
-      inputs: {parameters_file: {type: file, default: parameters.yaml}}
-
   infer:
-  # Run implementation
+  # Inference task
     parameters:
-      inputs: {data_path: data/, parameters_file: {type: file, default: parameters.yaml}}
-      # TODO Is it possible to include optional inputs here (like alternative path to checkpoints)?
-      # inputs: {data_path: data/, parameters_file: {type: file, default: null}, checkpoint_path: {type: file, default: null}}
+      # NOTE: parameters_file and checkpoint_path are *not* passed during federated evaluation
+      inputs: {data_path: data/, parameters_file: {type: file, default: "null"}, checkpoint_path: {type: file, default: "null"}}
       outputs: {output_path: output/}

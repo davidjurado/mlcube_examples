@@ -13,9 +13,9 @@ To make sure that the containers submitted by the participants also run successf
 ## Project setup
 
 Please follow these steps to get started:
-
+<!-- TODO singularity stuff once it is ready -->
 - Install [docker](https://docs.docker.com/engine/install/).
-- (Optional) Install [singularity](https://sylabs.io/guides/latest/user-guide/quick_start.html#quick-installation-steps). Only required if you want to test docker-to-singularity conversion yourself.
+<!-- - (Optional) Install [singularity](https://sylabs.io/guides/latest/user-guide/quick_start.html#quick-installation-steps). Only required if you want to test docker-to-singularity conversion yourself. -->
 - [Install MLCube](https://mlcommons.github.io/mlcube/getting-started/) (with docker runner) to a virtual/conda environment of your choice. For example:
 
 ```bash
@@ -23,8 +23,9 @@ Please follow these steps to get started:
 virtualenv -p python3 ./env && source ./env/bin/activate && pip install mlcube-docker
 ```
 
+<!-- - (Optional) Install MLCube's singularity runner. -->
 - Clone this repository
-TODO Update this once merged
+<!-- TODO Update this once merged -->
 
 ```bash
 git clone https://github.com/mlcommons/mlcube_examples && cd ./mlcube_examples
@@ -41,11 +42,14 @@ These are the most important files on this project:
 ```bash
 ├── mlcube
 │   ├── mlcube.yaml          # MLCube configuration, defines the project, author, platform, docker and tasks.
-│   └── workspace            # This folder is mounted at runtime.
-│       └── parameters.yaml  # File containing all extra parameters.
+│   └── workspace            # This folder is mounted at runtime. Note that it will be empty during fed. eval.
+│       ├── data             # For example some data can be put here during local testing.
+│       └── output           # Location where inference outputs are stored.
 └── project
     ├── Dockerfile           # Docker file with instructions to create the image.
     ├── mlcube.py            # Python entrypoint used by MLCube, contains the logic for MLCube tasks.
+    ├── model_ckpts          # Folder with checkpoint files loaded for inference.
+    ├── parameters.yaml      # File with parameters used by inference procedure.
     ├── requirements.txt     # Python requirements needed to run the project inside Docker.
     └── src
         ├── my_logic.py      # Python file that contains the main logic of the project.
@@ -101,17 +105,15 @@ In the `utilities.py` file you can add some functions that will be useful for yo
 
 ### Model checkpoint(s)
 
-The model checkpoints used for a final challenge submission have to be stored inside the MLCube to guarantee reproducibility. Therefore, please copy them to the `project/model_ckpts` directory. This folder will be copied to the docker image if you use the provided Dockerfile.
-
-TODO maybe add a sentence how to use optional argument for testing.
+This directory contains model checkpoints that are loaded for inference. The checkpoints used for a challenge submission have to be stored inside the MLCube to guarantee reproducibility. Therefore, please copy them to the `project/model_ckpts` directory, which will be copied to the docker image if you use the provided Dockerfile.
+When testing your MLCube locally, different checkpoint directories can be passed to an existing MLCube without rebuilding the image, as described in the [example section](#tasks-execution)). 
 
 ### Parameters file
 
-This is a yaml file (`parameters.yaml`) that contains all extra parameters that aren't files or directories. For example, here you can place all the hyperparameters that you will use for training a model. This file will be passed as an *input parameter* in the MLCube tasks and then it will be read inside the MLCube container.
+This file (`parameters.yaml`) contains all extra parameters that aren't files or directories. For example, here you can place all the hyperparameters that you will use for training a model. The parameters used for a challenge submission have to be stored inside the MLCube to guarantee reproducibility. Therefore, please copy the final paramters to the `project/parameters.yaml` file, which will be copied to the docker image if you use the provided Dockerfile.
+When testing your MLCube locally, different parameter files can be passed to an existing MLCube without rebuilding the image, as described in the [example section](#tasks-execution)). 
 
-TODO maybe add a sentence how to use this as an optional argument for testing.
-
-## Tasks execution
+## Task execution
 
 Here we describe the simple commands required to build and run MLCubes. Note that we use docker-based MLCubes for development, which are converted automatically to singularity images before the official evaluation.
 
@@ -129,6 +131,15 @@ By default, this will try to pull the image specified in the `docker` section of
 mlcube run --mlcube=mlcube.yaml --task=infer -Pdocker.build_strategy=always
 ```
 
+You can pass parameters defined in the `mlcube.yaml` file to the MLCube like this:
+
+```Bash
+# Run main task and always rebuild
+mlcube run --mlcube=mlcube.yaml --task=infer data_path=/path/to/data checkpoint_path=/path/to/checkpoints
+```
+
+where paths have to be specified as absolute paths. Refer to [this section](#mlcube-yaml-file) which parameters are supported. Note however, that only `data_path` and `output_path` will be available during federated evaluation.
+
 If you want to build the docker image without running it, you can use
 
 ```Bash
@@ -136,14 +147,15 @@ If you want to build the docker image without running it, you can use
 mlcube configure --mlcube=mlcube.yaml -Pdocker.build_strategy=always
 ```
 
-To use the Singularity runner instead, add the flag `--platform=singularity`:
+<!-- TODO add singularity part once it's ready -->
+<!-- To use the Singularity runner instead, add the flag `--platform=singularity`:
 
 ```bash
 # Run main task with singularity runner
 mlcube run --mlcube=mlcube.yaml --task=infer --platform=singularity
 ```
 
-Note that you need singularity installed and the MLCube singularity runner to run your MLCube with singularity.
+Note that you need singularity installed and the MLCube singularity runner to run your MLCube with singularity. -->
 
 ## Description of IO-interface
 

@@ -17,7 +17,6 @@ LABEL status="beta"
 RUN apt-get -y update && apt -y full-upgrade && apt-get -y install apt-utils wget git tar build-essential curl nano
 
 # install all python requirements
-# TODO I chose a different name than "/workspace" to avoid confusion with the MLCube workspace folder mounted at runtime. OK?
 WORKDIR /mlcube_project
 COPY ./requirements.txt ./requirements.txt
 RUN pip3 install -r requirements.txt

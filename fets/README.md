@@ -2,13 +2,9 @@
 
 This repository contains three [MLCubes](https://github.com/mlcommons/mlcube) used throughout the organization of the FeTS challenge:
 
-TODO Maybe we should even remove the two other containers from the FeTS example?
-
 1. Preprocessing: This MLCube contains the preprocessing pipeline employed in FeTS (which is identical to BraTS).
-2. Model: This MLCube can be used by **task-2 participants** to build their inference application. If you are looking for how to prepare your FeTS task-2 submission, please continue reading [here](model).
+2. Model: This MLCube can be used by **task-2 competitors** to build their inference application. If you are looking for how to prepare your FeTS task-2 submission, please continue reading [here](model).
 3. Metrics: This MLCube computes the segmentation metrics established in BraTS for (prediction, reference segmentation)-pairs.
-
-TODO Do we need the stuff below?
 
 ## Project setup
 
@@ -16,7 +12,7 @@ TODO Do we need the stuff below?
 # Create Python environment and install MLCube Docker runner 
 virtualenv -p python3 ./env && source ./env/bin/activate && pip install mlcube-docker
 
-# Fetch the boston housing example from GitHub
+# Fetch the examples from GitHub
 git clone https://github.com/mlcommons/mlcube_examples && cd ./mlcube_examples
 git fetch origin pull/58/head:feature/fets && git checkout feature/fets
 cd ./fets/metrics/mlcube
