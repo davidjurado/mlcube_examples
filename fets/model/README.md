@@ -134,7 +134,7 @@ mlcube run --mlcube=mlcube.yaml --task=infer -Pdocker.build_strategy=always
 You can pass parameters defined in the `mlcube.yaml` file to the MLCube like this:
 
 ```Bash
-# Run main task and always rebuild
+# Run main task with custom parameters
 mlcube run --mlcube=mlcube.yaml --task=infer data_path=/path/to/data checkpoint_path=/path/to/checkpoints
 ```
 
