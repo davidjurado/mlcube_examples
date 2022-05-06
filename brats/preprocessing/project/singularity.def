@@ -1,0 +1,29 @@
+Bootstrap: docker
+
+From: ubuntu:18.04
+
+%labels
+
+    author chuck@norris.org
+    application your application name
+    maintainer chuck@norris.org
+    version 0.0.1
+    status beta
+
+%files
+
+    run.sh /workspace
+    requirements.txt /workspace
+    mlcube.py /workspace
+
+%setup
+
+    apt-get -y update && apt -y full-upgrade && apt-get -y install apt-utils wget git tar build-essential curl nano
+    apt-get install -y python3
+    apt-get install -y python3-pip
+    pip install -r /workspace/requirements.txt
+    chmod +x /workspace/run.sh
+
+%runscript
+
+    python3 /workspace/mlcube.py "$@"
